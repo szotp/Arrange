@@ -91,3 +91,10 @@ Add the following line to your `Podfile`:
 ##### Manully
 
 Copy `Layout.swift` file to your project.
+
+### TODOs
+
+[ ] handling of layout guides
+
+[ ] support for animations
+[ ] better support for customizations, for example getting reference to the created stackView
