@@ -17,7 +17,7 @@ arrange(
 
 ##### Chaining
 
-`arrange` methods can be chained together to form full view hierarchy:
+`arrange` methods can be chained together to form complicated view hierarchy:
 
 <table width="100%"><tr>
 <td><pre lang="swift">
@@ -74,11 +74,11 @@ view.arrange([.hidden])
 
 ### Example
 
-Check the `ArrangePlayground.playground` file for sample code. Use timeline feature in Xcode to see changes in real time.
+Check the `ArrangePlayground.playground` file for sample code. Use timeline feature in Xcode to see the changes in real time.
 
 ### How to install
 
-##### Carhage
+##### Carthage
 Add the following line to your `Cartfile`:
 
 `github "szotp/Arrange"`
@@ -86,7 +86,7 @@ Add the following line to your `Cartfile`:
 ##### CocoaPods
 Add the following line to your `Podfile`:
 
-`pod Arrange, :git => "https://github.com/szotp/Arrange"`
+`pod "Arrange", :git => "https://github.com/szotp/Arrange"`
 
 ##### Manully
 

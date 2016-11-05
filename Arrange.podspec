@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
 
   s.platform     = :ios, "9.0"
 
-  s.source       = { :git => "https://github.com/szotp/Arrange.git", :commit => "c623e47993a6ca6b09b870bfba625a83f8d7fb2a" }
+  s.source       = { :git => "https://github.com/szotp/Arrange.git", :tag => 0.1 }
 
   s.source_files  = "Arrange/*.swift"
 end
