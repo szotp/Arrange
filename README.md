@@ -52,6 +52,26 @@ arrange(
 <td width="200px"><img src="Images/login2.png"/></td>
 </tr></table>
 
+##### Layout guides
+
+`arrange` called on view controller instead of a view will automatically use layout guides.
+
+<table width="100%"><tr>
+<td><pre lang="swift">
+class ExampleViewController : UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        title = "Navigation bar"
+        let inner = UIView().style {
+            $0.backgroundColor = .darkGray
+        }
+        arrange([.fill(10)], inner)
+    }
+}
+</pre></td>
+<td width="200px"><img src="Images/layoutGuides.png"/></td>
+</tr></table>
+
 ##### Extending
 `ArrangementItem` enum contains `after(Arrangement.Closure)` which can be used to create custom items. To do that, simply create extension of `ArrangementItem` and static variable, or static method.
 
@@ -94,6 +114,6 @@ Copy `Layout.swift` file to your project.
 
 ### TODOs
 
-- [ ] handling of layout guides
+- [x] handling of layout guides
 - [ ] support for animations
 - [ ] better support for customizations, for example getting reference to the created stackView
