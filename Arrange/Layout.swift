@@ -239,13 +239,15 @@ public struct Arrangement {
             paddedView.translatesAutoresizingMaskIntoConstraints = false
             
             if let constant = top {
-                context.superview.topAnchor.constraint(equalTo: paddedView.topAnchor, constant: -constant).isActive = true
+                let topAnchor = context.viewController?.topLayoutGuide.bottomAnchor ?? context.superview.topAnchor
+                topAnchor.constraint(equalTo: paddedView.topAnchor, constant: -constant).isActive = true
             }
             if let constant = left {
                 context.superview.leftAnchor.constraint(equalTo: paddedView.leftAnchor, constant: -constant).isActive = true
             }
             if let constant = bottom {
-                context.superview.bottomAnchor.constraint(equalTo: paddedView.bottomAnchor, constant: constant).isActive = true
+                let bottomAnchor = context.viewController?.bottomLayoutGuide.topAnchor ?? context.superview.bottomAnchor
+                bottomAnchor.constraint(equalTo: paddedView.bottomAnchor, constant: constant).isActive = true
             }
             if let constant = right {
                 context.superview.rightAnchor.constraint(equalTo: paddedView.rightAnchor, constant: constant).isActive = true
@@ -297,6 +299,7 @@ public class ArrangementContext {
     public var subviews: [UIView]
     public var paddedView: UIView?
     public var arrangement : Arrangement
+    public var viewController : UIViewController?
 
 
     init(arrangement : Arrangement, superview : UIView, subviews : [UIView]) {
@@ -330,6 +333,30 @@ public extension UIView {
             superview: self,
             subviews: subviews
         )
+
+        style.apply(context: context)
+        return self
+    }
+}
+
+public extension UIViewController {
+    /// Adds views to the view hierarchy, using the provided arrangement.
+    /// Arrangement can be also initialized as array of ArrangementTraits.
+    /// By default subviews will fill the superview with 0 margin, stacked vertically.
+    /// Returns self for chaining.
+    /// Uses layout guides of this view controller when arranging to top and bottom.
+    @discardableResult public func arrange(_ items: [ArrangementItem], _ subviews: UIView...) -> Self {
+        return arrange(items, subviews)
+    }
+
+    @discardableResult public func arrange(_ items: [ArrangementItem], _ subviews: [UIView]) -> Self {
+        let style = Arrangement(items)
+        let context = ArrangementContext(
+            arrangement: style,
+            superview: self.view,
+            subviews: subviews
+        )
+        context.viewController = self
 
         style.apply(context: context)
         return self

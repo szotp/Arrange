@@ -186,6 +186,20 @@ class ArrangeTests: XCTestCase {
         view.arrange([.hidden])
         assert(view.isHidden)
     }
+
+    func testViewControllerArrange() {
+        let viewController = UIViewController()
+        viewController.view = bigView()
+        let view = smallView()
+
+        viewController.arrange([.topAndSides(0)], view)
+
+        viewController.view.layoutIfNeeded()
+
+        XCTAssertEqual(view.superview, viewController.view)
+        XCTAssertEqual(view.frame, CGRect(x: 0, y: 0, width: 100, height: 10))
+        //smallView should be aligned to layoutGuides, but offsets will not be visible in the test
+    }
 }
 
 extension ArrangementItem {
