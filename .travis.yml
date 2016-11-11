@@ -1,0 +1,9 @@
+language: swift
+osx_image: xcode8
+
+before_install:
+- gem install cocoapods --no-rdoc --no-ri --no-document --quiet
+
+script:
+- set -o pipefail && xcodebuild -scheme Arrange -destination "platform=iOS Simulator,name=iPhone SE,OS=10.0" test | xcpretty -c
+- pod --version && pod spec lint
