@@ -379,7 +379,7 @@ public extension UIViewController {
             subviews: subviews
         )
         context.topAnchor = topLayoutGuide.bottomAnchor
-        context.bottomAnchor = topLayoutGuide.topAnchor
+        context.bottomAnchor = bottomLayoutGuide.topAnchor
 
         style.apply(context: context)
         return self
