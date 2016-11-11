@@ -200,6 +200,35 @@ class ArrangeTests: XCTestCase {
         XCTAssertEqual(view.frame, CGRect(x: 0, y: 0, width: 100, height: 10))
         //smallView should be aligned to layoutGuides, but offsets will not be visible in the test
     }
+
+    func testCustomAnchor() {
+        let big = bigView()
+        let center = smallView()
+        big.arrange([.centered], center)
+
+        let other = smallView()
+        let closure : Arrangement.Closure = {
+            $0.bottomAnchor = center.topAnchor
+        }
+        big.arrange([.before(closure)], other)
+
+        big.layoutIfNeeded()
+        XCTAssertEqual(other.frame, CGRect(x: 0, y: 0, width: 100, height: 45))
+    }
+
+    func testStackViewCustomization() {
+        let big = bigView()
+        let a = smallView()
+        let b = smallView()
+
+        let closure : Arrangement.Closure = {
+            $0.stackView?.spacing = 20
+        }
+        big.arrange([.after(closure), .equalSizes], a, b)
+        big.layoutIfNeeded()
+
+        XCTAssertEqual(a.frame, CGRect(x: 0, y: 0, width: 100, height: 40))
+    }
 }
 
 extension ArrangementItem {

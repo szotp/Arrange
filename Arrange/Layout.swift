@@ -52,6 +52,9 @@ public enum ArrangementItem {
     /// Items in stack should have given spacing. Default is 0.
     case spacing(CGFloat)
 
+    /// Given closure should be executed before main arrangement has been performed.
+    case before(Arrangement.Closure)
+
     /// Given closure should be executed after main arrangement has been performed.
     case after(Arrangement.Closure)
 
@@ -155,6 +158,9 @@ extension Arrangement {
                 paddedY = true
                 paddedX = true
 
+            case let .before(closure):
+                pre.append(closure)
+
             case let .after(closure):
                 post.append(closure)
 
@@ -202,9 +208,14 @@ public struct Arrangement {
 
     var scrollable = false
 
+    var pre: [Closure] = []
     var post: [Closure] = []
 
     func apply(context: ArrangementContext) {
+        for closure in pre {
+            closure(context)
+        }
+
         if context.subviews.count > 1 {
             switch stacking {
             case let .stack(axis, spacing):
@@ -239,18 +250,16 @@ public struct Arrangement {
             paddedView.translatesAutoresizingMaskIntoConstraints = false
             
             if let constant = top {
-                let topAnchor = context.viewController?.topLayoutGuide.bottomAnchor ?? context.superview.topAnchor
-                topAnchor.constraint(equalTo: paddedView.topAnchor, constant: -constant).isActive = true
+                context.topAnchor.constraint(equalTo: paddedView.topAnchor, constant: -constant).isActive = true
             }
             if let constant = left {
                 context.superview.leftAnchor.constraint(equalTo: paddedView.leftAnchor, constant: -constant).isActive = true
             }
             if let constant = bottom {
-                let bottomAnchor = context.viewController?.bottomLayoutGuide.topAnchor ?? context.superview.bottomAnchor
-                bottomAnchor.constraint(equalTo: paddedView.bottomAnchor, constant: constant).isActive = true
+                context.bottomAnchor.constraint(equalTo: paddedView.bottomAnchor, constant: constant).isActive = true
             }
             if let constant = right {
-                context.superview.rightAnchor.constraint(equalTo: paddedView.rightAnchor, constant: constant).isActive = true
+                context.rightAnchor.constraint(equalTo: paddedView.rightAnchor, constant: constant).isActive = true
             }
             
             if centeredX {
@@ -299,12 +308,25 @@ public class ArrangementContext {
     public var subviews: [UIView]
     public var paddedView: UIView?
     public var arrangement : Arrangement
-    public var viewController : UIViewController?
 
+    public var topAnchor : NSLayoutYAxisAnchor
+    public var bottomAnchor : NSLayoutYAxisAnchor
+    public var leftAnchor : NSLayoutXAxisAnchor
+    public var rightAnchor : NSLayoutXAxisAnchor
+
+    public var stackView : UIStackView? {
+        return paddedView as? UIStackView
+    }
 
     init(arrangement : Arrangement, superview : UIView, subviews : [UIView]) {
         self.arrangement = arrangement
         self.superview = superview
+
+        topAnchor = superview.topAnchor
+        bottomAnchor = superview.bottomAnchor
+        leftAnchor = superview.leftAnchor
+        rightAnchor = superview.rightAnchor
+
         self.subviews = subviews
     }
 }
@@ -356,7 +378,8 @@ public extension UIViewController {
             superview: self.view,
             subviews: subviews
         )
-        context.viewController = self
+        context.topAnchor = topLayoutGuide.bottomAnchor
+        context.bottomAnchor = topLayoutGuide.topAnchor
 
         style.apply(context: context)
         return self
