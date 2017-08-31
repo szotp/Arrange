@@ -117,3 +117,4 @@ Copy `Layout.swift` file to your project.
 - [x] handling of layout guides
 - [ ] support for animations
 - [ ] better support for customizations, for example getting reference to the created stackView
+
