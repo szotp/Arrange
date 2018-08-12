@@ -29,7 +29,7 @@ class ArrangeTests: XCTestCase {
         super.tearDown()
     }
     
-    func testOneToOne(_ arrangement : [ArrangementItem], expected : CGRect, file: StaticString = #file, line: UInt = #line) {
+    func testOneToOne(_ arrangement : Arrangement, expected : CGRect, file: StaticString = #file, line: UInt = #line) {
         let view = bigView()
         let subview = smallView()
 
@@ -222,7 +222,7 @@ class ArrangeTests: XCTestCase {
         let b = smallView()
 
         let closure : Arrangement.Closure = {
-            $0.stackView?.spacing = 20
+            $0.stack.spacing = 20
         }
         big.arrange([.after(closure), .equalSizes], a, b)
         big.layoutIfNeeded()

@@ -7,10 +7,21 @@ class ExampleViewController : UIViewController {
         super.viewDidLoad()
 
         title = "Navigation bar"
-        let inner = UIView().style {
-            $0.backgroundColor = .darkGray
+        
+        view.style {
+            $0.backgroundColor = UIColor.darkGray
         }
-        arrange([.fill(10)], inner)
+
+        view.arrange(
+            .custom {
+                $0.relativeToSafeArea()
+                $0.setPadding(16)
+                $0.fill()
+            },
+            UIView().style {
+                $0.backgroundColor = .gray
+            }
+        )
     }
 }
 
